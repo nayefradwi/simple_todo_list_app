@@ -84,26 +84,38 @@ class _MainScreenState extends State<MainScreen> {
   Widget _getMainTodoItem() {
     String title = "finish this app";
     String description = "you want to add this to your resume";
-    String tag = "Work";
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
       child: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              side: BorderSide(color: Colors.red.shade300)),
           elevation: 0,
           color: TodoApp.CARD,
           child: ListTile(
-            leading: Checkbox(
-              value: isDone,
-              onChanged: (value) => setState(() => isDone = value),
-              checkColor: TodoApp.PRIMARY_TEXT,
-              activeColor: TodoApp.ACCENT,
+            leading: Theme(
+              data: ThemeData(unselectedWidgetColor: TodoApp.ACCENT),
+              child: Checkbox(
+                value: isDone,
+                onChanged: (value) => setState(() => isDone = value),
+                checkColor: TodoApp.PRIMARY_TEXT,
+                activeColor: TodoApp.ACCENT,
+              ),
             ),
             isThreeLine: description.isEmpty,
+            subtitle: Text(description,
+                style: TextStyle(
+                  decoration:
+                      isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                  color: TodoApp.TERTIARY_TEXT,
+                  fontSize: 16,
+                )),
             title: Text(
               title,
               style: TextStyle(
                 decoration:
                     isDone ? TextDecoration.lineThrough : TextDecoration.none,
-                color: TodoApp.SECONDARY_TEXT,
+                color: isDone ? TodoApp.TERTIARY_TEXT : TodoApp.SECONDARY_TEXT,
                 fontSize: 20,
               ),
             ),
