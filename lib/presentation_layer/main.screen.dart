@@ -14,7 +14,9 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
         backgroundColor: TodoApp.BACKGROUND_COLOR,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            _showAddTodoDialog(context);
+          },
           backgroundColor: TodoApp.PRIMARY,
           child: Icon(
             Icons.add,
@@ -105,21 +107,46 @@ class _MainScreenState extends State<MainScreen> {
             isThreeLine: description.isEmpty,
             subtitle: Text(description,
                 style: TextStyle(
-                  decoration:
-                      isDone ? TextDecoration.lineThrough : TextDecoration.none,
-                  color: TodoApp.TERTIARY_TEXT,
-                  fontSize: 16,
-                )),
+                    decoration: isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    color: TodoApp.TERTIARY_TEXT,
+                    fontSize: 16,
+                    fontFamily: "Raleway")),
             title: Text(
               title,
               style: TextStyle(
-                decoration:
-                    isDone ? TextDecoration.lineThrough : TextDecoration.none,
-                color: isDone ? TodoApp.TERTIARY_TEXT : TodoApp.SECONDARY_TEXT,
-                fontSize: 20,
-              ),
+                  decoration:
+                      isDone ? TextDecoration.lineThrough : TextDecoration.none,
+                  color: isDone ? TodoApp.TERTIARY_TEXT : TodoApp.PRIMARY_TEXT,
+                  fontSize: 20,
+                  fontFamily: "Raleway"),
             ),
           )),
     );
+  }
+
+  void _showAddTodoDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              elevation: 1,
+              backgroundColor: TodoApp.ACCENT,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(hintText: "title"),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ));
   }
 }
