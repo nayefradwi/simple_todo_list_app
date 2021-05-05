@@ -7,7 +7,7 @@ class DatabaseSource {
   bool _isInitialized = false;
   static DatabaseSource _$ = DatabaseSource._();
   factory DatabaseSource.getInstance() => _$;
-  Box<Todo> _todosBox;
+  late Box<Todo> _todosBox;
 
   Future<void> init() async {
     if (_isInitialized) return;
@@ -28,7 +28,7 @@ class DatabaseSource {
     return await this._todosBox.delete(todo.key);
   }
 
-  Future<void> deleteAll() async {
+  Future<int> deleteAll() async {
     return await this._todosBox.clear();
   }
 

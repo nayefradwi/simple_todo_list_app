@@ -7,7 +7,7 @@ import 'package:todo_list/presentation_layer/main.screen.dart';
 class AppRouter {
   static const String MAIN_SCREEN = '/';
 
-  Route onGenerate(RouteSettings settings) {
+  Route? onGenerate(RouteSettings settings) {
     switch (settings.name) {
       case MAIN_SCREEN:
         return MaterialPageRoute(

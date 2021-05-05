@@ -6,9 +6,9 @@ import 'package:todo_list/data_layer/todo.model.dart';
 import '../main.dart';
 
 class TodoWidget extends StatefulWidget {
-  final Todo todoObject;
+  final Todo? todoObject;
 
-  const TodoWidget({Key key, this.todoObject}) : super(key: key);
+  const TodoWidget({Key? key, this.todoObject}) : super(key: key);
   @override
   _TodoWidgetState createState() => _TodoWidgetState();
 }
@@ -19,11 +19,11 @@ class _TodoWidgetState extends State<TodoWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
       child: Dismissible(
-        key: ValueKey(widget.todoObject.key),
+        key: ValueKey(widget.todoObject!.key),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.endToStart) return true;
           BlocProvider.of<TodoCubit>(context)
-              .markDoneOrUnDone(widget.todoObject);
+              .markDoneOrUnDone(widget.todoObject!);
           return false;
         },
         onDismissed: (DismissDirection direction) {
@@ -39,17 +39,17 @@ class _TodoWidgetState extends State<TodoWidget> {
               leading: Theme(
                 data: ThemeData(unselectedWidgetColor: TodoApp.ACCENT),
                 child: Checkbox(
-                  value: widget.todoObject.isDone,
+                  value: widget.todoObject!.isDone,
                   onChanged: (value) => BlocProvider.of<TodoCubit>(context)
-                      .markDoneOrUnDone(widget.todoObject),
+                      .markDoneOrUnDone(widget.todoObject!),
                   checkColor: TodoApp.PRIMARY_TEXT,
                   activeColor: TodoApp.ACCENT,
                 ),
               ),
-              subtitle: widget.todoObject.description.isNotEmpty
-                  ? Text(widget.todoObject.description,
+              subtitle: widget.todoObject!.description!.isNotEmpty
+                  ? Text(widget.todoObject!.description!,
                       style: TextStyle(
-                          decoration: widget.todoObject.isDone
+                          decoration: widget.todoObject!.isDone!
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,
                           color: TodoApp.TERTIARY_TEXT,
@@ -57,12 +57,12 @@ class _TodoWidgetState extends State<TodoWidget> {
                           fontFamily: "Raleway"))
                   : null,
               title: Text(
-                widget.todoObject.title,
+                widget.todoObject!.title!,
                 style: TextStyle(
-                    decoration: widget.todoObject.isDone
+                    decoration: widget.todoObject!.isDone!
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
-                    color: widget.todoObject.isDone
+                    color: widget.todoObject!.isDone!
                         ? TodoApp.TERTIARY_TEXT
                         : TodoApp.PRIMARY_TEXT,
                     fontSize: 20,

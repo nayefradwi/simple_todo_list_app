@@ -12,7 +12,7 @@ class TodoCubit extends Bloc<TodoEvents, TodoStates> {
     if (event is AddTodoEvent) {
       DatabaseSource.getInstance().saveTodo(event.todo);
     } else if (event is DeleteTodo) {
-      DatabaseSource.getInstance().deletTodo(event.todo);
+      DatabaseSource.getInstance().deletTodo(event.todo!);
     }
     yield TodoInitState();
   }
@@ -24,7 +24,7 @@ class TodoCubit extends Bloc<TodoEvents, TodoStates> {
       ..title = title));
   }
 
-  void deleteTodo(Todo todo) {
+  void deleteTodo(Todo? todo) {
     this.add(DeleteTodo(todo));
   }
 
@@ -34,7 +34,7 @@ class TodoCubit extends Bloc<TodoEvents, TodoStates> {
   }
 
   void markDoneOrUnDone(Todo todo) async {
-    todo.isDone = !todo.isDone;
+    todo.isDone = !todo.isDone!;
     await DatabaseSource.getInstance().editTodo(todo);
     this.add(MarkTodoDone());
   }

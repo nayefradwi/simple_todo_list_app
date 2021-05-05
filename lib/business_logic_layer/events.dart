@@ -12,7 +12,7 @@ class AddTodoEvent extends TodoEvents {
 }
 
 class DeleteTodo extends TodoEvents {
-  final Todo todo;
+  final Todo? todo;
   const DeleteTodo(this.todo);
 }
 

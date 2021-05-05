@@ -17,9 +17,9 @@ class TodoAdapter extends TypeAdapter<Todo> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Todo()
-      ..title = fields[0] as String
-      ..description = fields[1] as String
-      ..isDone = fields[2] as bool;
+      ..title = fields[0] as String?
+      ..description = fields[1] as String?
+      ..isDone = fields[2] as bool?;
   }
 
   @override
