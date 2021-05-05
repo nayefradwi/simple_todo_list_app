@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list/business_logic_layer/states.dart';
+import 'package:todo_list/business_logic_layer/todo.cubit.dart';
+import 'package:todo_list/data_layer/data.source.dart';
 import 'package:todo_list/main.dart';
+import 'package:todo_list/presentation_layer/todo.widget.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -15,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: TodoApp.BACKGROUND_COLOR,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _showAddTodoDialog(context);
+            BlocProvider.of<TodoCubit>(context).addTodo("finish app", "");
           },
           backgroundColor: TodoApp.PRIMARY,
           child: Icon(
@@ -24,106 +29,50 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         body: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(15, 20, 0, 10),
-                sliver: SliverToBoxAdapter(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Todos",
-                      style: TextStyle(
-                        color: TodoApp.PRIMARY_TEXT,
-                        fontSize: 28,
-                        fontFamily: "PlayFair",
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 5, 250, 5),
-                      child: Divider(
-                        color: TodoApp.ACCENT,
-                      ),
-                    ),
-                  ],
-                )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                child: Text(
+                  "Todos",
+                  style: TextStyle(
+                    color: TodoApp.PRIMARY_TEXT,
+                    fontSize: 28,
+                    fontFamily: "PlayFair",
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-              SliverList(
-                  delegate: SliverChildListDelegate(<Widget>[
-                _getMainTodoItem(),
-              ]))
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 250, 5),
+                child: Divider(
+                  color: TodoApp.ACCENT,
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<TodoCubit, TodoStates>(
+                  builder: (context, state) {
+                    return CustomScrollView(
+                      slivers: [
+                        SliverList(
+                            delegate: SliverChildBuilderDelegate((context, i) {
+                          return TodoWidget(
+                            todoObject:
+                                DatabaseSource.getInstance().getTodos()[i],
+                          );
+                        },
+                                childCount: DatabaseSource.getInstance()
+                                    .getTodos()
+                                    .length))
+                      ],
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ));
-  }
-
-  // Widget _getMainTodoItem() {
-  //   String title = "finish this app";
-  //   String description = "you want to add this to your resume";
-  //   String tag = "Work";
-  //   return Padding(
-  //     padding: const EdgeInsets.all(8.0),
-  //     child: Card(
-  //         elevation: 0,
-  //         color: TodoApp.CARD,
-  //         child: Row(
-  //           children: [
-  //             Checkbox(
-  //               value: isDone,
-  //               onChanged: (value) {
-  //                 setState(() {
-  //                   isDone = value;
-  //                 });
-  //               },
-  //             )
-  //           ],
-  //         )),
-  //   );
-  // }
-
-  Widget _getMainTodoItem() {
-    String title = "finish this app";
-    String description = "you want to add this to your resume";
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
-      child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(color: Colors.red.shade300)),
-          elevation: 0,
-          color: TodoApp.CARD,
-          child: ListTile(
-            leading: Theme(
-              data: ThemeData(unselectedWidgetColor: TodoApp.ACCENT),
-              child: Checkbox(
-                value: isDone,
-                onChanged: (value) => setState(() => isDone = value),
-                checkColor: TodoApp.PRIMARY_TEXT,
-                activeColor: TodoApp.ACCENT,
-              ),
-            ),
-            isThreeLine: description.isEmpty,
-            subtitle: Text(description,
-                style: TextStyle(
-                    decoration: isDone
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    color: TodoApp.TERTIARY_TEXT,
-                    fontSize: 16,
-                    fontFamily: "Raleway")),
-            title: Text(
-              title,
-              style: TextStyle(
-                  decoration:
-                      isDone ? TextDecoration.lineThrough : TextDecoration.none,
-                  color: isDone ? TodoApp.TERTIARY_TEXT : TodoApp.PRIMARY_TEXT,
-                  fontSize: 20,
-                  fontFamily: "Raleway"),
-            ),
-          )),
-    );
   }
 
   void _showAddTodoDialog(BuildContext context) {
@@ -143,7 +92,14 @@ class _MainScreenState extends State<MainScreen> {
                       child: TextField(
                         decoration: InputDecoration(hintText: "title"),
                       ),
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(hintText: "title"),
+                      ),
+                    ),
+                    // add button
                   ],
                 ),
               ),

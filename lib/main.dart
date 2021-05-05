@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/presentation_layer/main_navigation.dart';
+import 'package:todo_list/data_layer/data.source.dart';
+import 'package:todo_list/presentation_layer/main.navigation.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseSource.getInstance().init();
   runApp(TodoApp());
 }
 
@@ -18,7 +21,7 @@ class TodoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Todo app',
       onGenerateRoute: AppRouter().onGenerate,
     );
   }
