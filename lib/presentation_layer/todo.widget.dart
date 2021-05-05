@@ -32,7 +32,7 @@ class _TodoWidgetState extends State<TodoWidget> {
         child: Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                side: BorderSide(color: Colors.red.shade300)),
+                side: BorderSide(color: TodoApp.ERROR)),
             elevation: 0,
             color: TodoApp.CARD,
             child: ListTile(

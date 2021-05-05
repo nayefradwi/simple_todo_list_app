@@ -28,6 +28,11 @@ class TodoCubit extends Bloc<TodoEvents, TodoStates> {
     this.add(DeleteTodo(todo));
   }
 
+  void deleteAll() async {
+    await DatabaseSource.getInstance().deleteAll();
+    this.add(MarkTodoDone());
+  }
+
   void markDoneOrUnDone(Todo todo) async {
     todo.isDone = !todo.isDone;
     await DatabaseSource.getInstance().editTodo(todo);

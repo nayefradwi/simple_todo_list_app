@@ -13,6 +13,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool isDone = false;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: TodoApp.BACKGROUND_COLOR,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            BlocProvider.of<TodoCubit>(context).addTodo("finish app", "");
+            _showAddTodoDialog(context);
           },
           backgroundColor: TodoApp.PRIMARY,
           child: Icon(
@@ -75,14 +77,14 @@ class _MainScreenState extends State<MainScreen> {
         ));
   }
 
-  void _showAddTodoDialog(BuildContext context) {
+  void _showAddTodoDialog(BuildContext _context) {
     showDialog(
-        context: context,
+        context: _context,
         builder: (context) => Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              elevation: 1,
-              backgroundColor: TodoApp.ACCENT,
+              backgroundColor: TodoApp.CARD,
+              elevation: 0,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -90,19 +92,86 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        decoration: InputDecoration(hintText: "title"),
+                        controller: _titleController,
+                        cursorColor: TodoApp.PRIMARY_TEXT,
+                        style: TextStyle(
+                            color: TodoApp.PRIMARY_TEXT, fontFamily: "Raleway"),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                                color: TodoApp.TERTIARY_TEXT,
+                                fontFamily: "Raleway"),
+                            hintText: "title",
+                            hintStyle: TextStyle(
+                                color: TodoApp.TERTIARY_TEXT,
+                                fontFamily: "Raleway"),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: TodoApp.ERROR, width: 2)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: TodoApp.ACCENT, width: 2))),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
-                        decoration: InputDecoration(hintText: "title"),
+                        controller: _descriptionController,
+                        cursorColor: TodoApp.PRIMARY_TEXT,
+                        style: TextStyle(
+                            color: TodoApp.PRIMARY_TEXT, fontFamily: "Raleway"),
+                        decoration: InputDecoration(
+                            counterStyle: TextStyle(
+                                color: TodoApp.TERTIARY_TEXT,
+                                fontFamily: "Raleway"),
+                            hintText: "description",
+                            hintStyle: TextStyle(
+                                color: TodoApp.TERTIARY_TEXT,
+                                fontFamily: "Raleway"),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: TodoApp.ERROR, width: 2)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: TodoApp.ACCENT, width: 2))),
+                        maxLines: 4,
+                        maxLength: 100,
                       ),
                     ),
-                    // add button
+                    Theme(
+                      data: ThemeData(splashColor: TodoApp.PRIMARY),
+                      child: TextButton(
+                          onPressed: () {
+                            if (_titleController.text.isNotEmpty) {
+                              BlocProvider.of<TodoCubit>(_context).addTodo(
+                                  _titleController.text,
+                                  _descriptionController.text);
+                              _descriptionController.clear();
+                              _titleController.clear();
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "ADD TODO",
+                            style: TextStyle(
+                                fontFamily: "Raleway",
+                                fontWeight: FontWeight.bold,
+                                color: TodoApp.PRIMARY_TEXT),
+                          )),
+                    )
                   ],
                 ),
               ),
             ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
   }
 }

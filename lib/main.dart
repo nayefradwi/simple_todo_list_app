@@ -15,6 +15,7 @@ class TodoApp extends StatelessWidget {
   static const Color SECONDARY_TEXT = Color(0xFFD2D2D9);
   static const Color TERTIARY_TEXT = Color(0xFFABAEB5);
   static const Color ACCENT = Color(0xFF676A7B);
+  static const Color ERROR = Color(0xFFE57373);
   static const Color CARD = Color(0xFF222A41);
 
   @override
