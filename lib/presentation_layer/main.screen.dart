@@ -92,6 +92,14 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
+                        onSubmitted: (value) {
+                          BlocProvider.of<TodoCubit>(_context)
+                              .addTodo(value, _descriptionController.text);
+                          _descriptionController.clear();
+                          _titleController.clear();
+                          Navigator.pop(context);
+                        },
+                        autofocus: true,
                         controller: _titleController,
                         cursorColor: TodoApp.PRIMARY_TEXT,
                         style: TextStyle(
